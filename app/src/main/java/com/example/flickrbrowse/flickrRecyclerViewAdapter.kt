@@ -33,8 +33,7 @@ class flickrRecyclerViewAdapter(private var photoList: List<photo>) :RecyclerVie
             .error(R.drawable.placeholder)
             .placeholder(R.drawable.placeholder)
             .into(holder.thumbnail);
-        holder.title.setText(photoItem.title);
-
+        holder.title.text = photoItem.title
 
     }
 

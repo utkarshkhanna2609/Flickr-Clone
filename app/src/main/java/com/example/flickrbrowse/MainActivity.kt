@@ -13,35 +13,35 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowse.databinding.ActivityMainBinding
 import java.lang.Exception
 import java.net.URL
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlickrJsonData.OnDataAvailable {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private val FlickrRecyclerViewAdapter=flickrRecyclerViewAdapter(ArrayList())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
         setSupportActionBar(binding.toolbar)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter=FlickrRecyclerViewAdapter
+
         val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "android,oreo","en-us",true)
-        val getRawData=getRawData(this)
+        val GetRawData=getRawData(this)
         //getRawData.setDownloadCompleteListener(this)
-        getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=android,oreo&format=json&nojsoncallback=1")
+        GetRawData.execute(url)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
     }
 
     private fun createUri(baseURL: String, searchCriteria:String, lang:String,matchAll:Boolean):String{
@@ -87,13 +87,14 @@ class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlic
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        super.onSupportNavigateUp()
+        return true
     }
 
     override fun onDataAvailable(data: List<photo>) {
         Log.d(TAG,"onDataAvailabale called, data is $data")
+        FlickrRecyclerViewAdapter.loadNewData(data)
+        Log.d(TAG,"onDataAvailabale ends")
     }
 
     override fun onError(exception: Exception) {
