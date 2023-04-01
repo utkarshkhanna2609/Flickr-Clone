@@ -8,6 +8,7 @@ import javax.net.ssl.SSLSession
 import javax.net.ssl.X509TrustManager
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.net.Uri
 import android.nfc.NdefRecord.createUri
 import android.os.Bundle
@@ -29,7 +30,7 @@ import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
 import javax.net.ssl.TrustManager
 
-class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlickrJsonData.OnDataAvailable,
+class MainActivity : BaseActivity(), getRawData.onDownloadComplete, GetFlickrJsonData.OnDataAvailable,
     RecyclerItemClickListener.OnRecyclerClickListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlic
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(binding.toolbar)
+        activateToolBar(false)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlic
         })
 
 
-        val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "moon","en-us",true)
+        val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "nike shoes","en-us",true)
         val GetRawData=getRawData(this)
         //getRawData.setDownloadCompleteListener(this)
         GetRawData.execute(url)
@@ -86,7 +87,13 @@ class MainActivity : AppCompatActivity(), getRawData.onDownloadComplete, GetFlic
 
     override fun onItemLongClick(view: View, position: Int) {
         Log.d(TAG,"onItemLongClick starts")
-        Toast.makeText(this,"Long tap at $position", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this,"Long tap at $position", Toast.LENGTH_SHORT).show()
+        val photo=FlickrRecyclerViewAdapter.getPhoto(position)
+        if(photo!=null){
+            val intent= Intent(this,PhotoDetailsActivity::class.java)
+            intent.putExtra(PHOTO_TRANSFER,photo)
+            startActivity(intent)
+        }
     }
 
     private fun createUri(baseURL: String, searchCriteria:String, lang:String, matchAll:Boolean):String{

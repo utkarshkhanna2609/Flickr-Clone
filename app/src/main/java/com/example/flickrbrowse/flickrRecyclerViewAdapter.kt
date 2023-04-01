@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 
 class FlickerImageViewHolder(view: View):RecyclerView.ViewHolder(view){
@@ -29,11 +30,13 @@ class flickrRecyclerViewAdapter(private var photoList: List<photo>) :RecyclerVie
         // This method is called by the layout manager when it needs new data in existing view
         val photoItem=photoList[position]
         Log.d(TAG,"onBindViewHolder is called")
-        Picasso.get().load(photoItem.image)
+        Glide.with(holder.thumbnail.context)
+            .load(photoItem.image)
             .error(R.drawable.placeholder)
             .placeholder(R.drawable.placeholder)
-            .into(holder.thumbnail);
+            .into(holder.thumbnail)
         holder.title.text = photoItem.title
+
 
     }
 
