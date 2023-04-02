@@ -73,7 +73,7 @@ class MainActivity : BaseActivity(), getRawData.onDownloadComplete, GetFlickrJso
         })
 
 
-        val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "nike shoes","en-us",true)
+        val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "samsung mobile","en-us",true)
         val GetRawData=getRawData(this)
         //getRawData.setDownloadCompleteListener(this)
         GetRawData.execute(url)
