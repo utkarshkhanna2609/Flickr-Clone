@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import android.nfc.NdefRecord.createUri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -73,10 +74,7 @@ class MainActivity : BaseActivity(), getRawData.onDownloadComplete, GetFlickrJso
         })
 
 
-        val url=createUri("https://api.flickr.com/services/feeds/photos_public.gne", "samsung mobile","en-us",true)
-        val GetRawData=getRawData(this)
-        //getRawData.setDownloadCompleteListener(this)
-        GetRawData.execute(url)
+
 
     }
 
@@ -120,8 +118,12 @@ class MainActivity : BaseActivity(), getRawData.onDownloadComplete, GetFlickrJso
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_search -> {
+                startActivity(Intent(this,SearchActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -151,5 +153,21 @@ class MainActivity : BaseActivity(), getRawData.onDownloadComplete, GetFlickrJso
 
     override fun onError(exception: Exception) {
         Log.d(TAG, "onError called, with ${exception.message}")
+    }
+
+    override fun onResume() {
+        Log.d(TAG,".onResume() called")
+        super.onResume()
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val queryResult = sharedPref.getString(FLICKR_QUERY, "")
+
+        if (queryResult != null) {
+            if (queryResult.isNotEmpty()) {
+                val url = createUri("https://api.flickr.com/services/feeds/photos_public.gne", queryResult,"en-us", true)
+                val getRawData = getRawData(this)
+                getRawData.execute(url)
+            }
+        }
+        Log.d(TAG, ".onResume: ends")
     }
 }

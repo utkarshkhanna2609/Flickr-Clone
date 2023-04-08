@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FlickrBrowse</string>
+    <string name="app_name">Flickr Browser</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -11,4 +11,11 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="browse_image_description">flickr_download</string>
+    <string name="photo_title">photo title</string>
+    <string name="photo_author">photo author</string>
+    <string name="photo_tags">photo tags</string>
+    <string name="photo_title_text">Photo Title: %s</string>
+    <string name="photo_title_tags">Photo Tags: %s</string>
+    <string name="photo_auth_text">Author: %s</string>
+    <string name="action_search">Search</string>
 </resources>

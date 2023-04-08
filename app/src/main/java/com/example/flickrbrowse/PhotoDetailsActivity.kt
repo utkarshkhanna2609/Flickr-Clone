@@ -18,9 +18,9 @@ class PhotoDetailsActivity : AppCompatActivity() {
         val au = findViewById<TextView>(R.id.photo_author)
         val img = findViewById<ImageView>(R.id.imageView)
 
-        pd.text = photo.title
-        pt.text = photo.tags
-        au.text = photo.author
+        pd.text = resources.getString(R.string.photo_title_text,photo.title)
+        pt.text = resources.getString(R.string.photo_title_tags, photo.tags)
+        au.text = resources.getString(R.string.photo_auth_text, photo.author)
 
         Glide.with(this)
             .load(photo.link)
